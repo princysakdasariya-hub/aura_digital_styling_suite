@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA STUDIO | AI Color & Capsule Styling Suite</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Cinzel', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            50: '#fdfbf7',
+                            100: '#f8f1e5',
+                            200: '#eddcb2',
+                            300: '#dfc287',
+                            400: '#cca25c',
+                            500: '#b8863b',
+                            600: '#9d6f2f',
+                            700: '#7c5424',
+                            800: '#5c3e1e',
+                            900: '#3e2a16',
+                        },
+                        charcoal: '#1c1c1c',
+                        alabaster: '#fbfaf8',
+                        warmgray: '#f5f4f0',
+                        ivory: '#FAF9F6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Modern light scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1ebd9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cca25c;
+            border-radius: 4px;
+        }
+        /* Custom subtle scan line animation */
+        @keyframes scan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+        .scan-line {
+            animation: scan 3s ease-in-out infinite;
+        }
+        .premium-shadow {
+            box-shadow: 0 10px 30px -5px rgba(184, 134, 59, 0.08);
+        }
+        .premium-shadow-sm {
+            box-shadow: 0 4px 15px -3px rgba(184, 134, 59, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-alabaster text-charcoal font-sans overflow-x-hidden min-h-screen selection:bg-gold-200 selection:text-charcoal">
+
+    <nav class="border-b border-gold-100 bg-white/90 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex justify-between items-center transition-all">
+        <div class="flex items-center gap-3">
+            <span class="font-serif text-2xl tracking-[4px] text-gold-600 font-bold">AURA</span>
+            <span class="text-[10px] bg-gold-100 text-gold-700 px-2 py-0.5 rounded tracking-widest font-semibold border border-gold-300/20">STUDIO</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-gray-600">
+            <span class="hover:text-gold-600 transition-colors cursor-pointer hidden md:inline-flex items-center gap-1.5 font-medium"><i class="fa-solid fa-wand-magic-sparkles text-gold-500"></i> AI Wardrobe Assistant</span>
+            <span class="text-xs text-gold-700 border border-gold-300 rounded-full px-3 py-1 bg-gold-50 hidden sm:inline-block font-semibold">Premium Full Access</span>
+        </div>
+    </nav>
+
+    <header class="max-w-7xl mx-auto px-6 pt-12 pb-6 text-center">
+        <span class="text-xs text-gold-600 font-bold uppercase tracking-widest bg-gold-100/50 px-3 py-1 rounded-full border border-gold-200/50">Personal Color Flow & Capsule System</span>
+        <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal tracking-wide leading-tight mt-4">
+            The Complete <span class="text-gold-600 font-medium">Color & Capsule</span> Studio
+        </h1>
+        <p class="mt-4 text-gray-500 max-w-2xl mx-auto text-sm md:text-base font-light">
+            Formulate your seasonal palettes, design bespoke multi-combination capsules, and dynamically generate unlimited look combinations using a highly customizable light design ecosystem.
+        </p>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- LEFT PANEL: PERSONAL COLOR ANALYSIS -->
+        <section class="lg:col-span-5 bg-white border border-gold-100 rounded-2xl p-6 premium-shadow flex flex-col gap-6">
+            <div>
+                <div class="flex justify-between items-center border-b border-gold-100 pb-3">
+                    <h2 class="font-serif text-xl text-charcoal flex items-center gap-2">
+                        <span class="text-gold-500">01.</span> Feature Analysis
+                    </h2>
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-0.5 rounded font-bold uppercase">Dynamic Flow Enabled</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Select and blend features to discover your custom sub-season flow or trigger the auto scanner simulation below.</p>
+            </div>
+
+            <div class="relative bg-warmgray/60 rounded-xl overflow-hidden aspect-[4/3] border border-gold-100/80 flex flex-col items-center justify-center p-4">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12),transparent_70%)]"></div>
+                
+                <!-- Scanner Grid Line -->
+                <div id="scannerLine" class="hidden absolute left-0 right-0 h-[2px] bg-gold-400/80 shadow-[0_0_12px_#cca25c] z-10 scan-line"></div>
+
+                <!-- Live Dynamic Avatar Rendering SVG -->
+                <svg id="avatarSvg" class="w-40 h-40 drop-shadow-[0_8px_20px_rgba(184,134,59,0.15)] transition-all duration-500" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Hair Back Layer -->
+                    <path id="svgHairBack" d="M30,35 C20,35 15,45 15,60 C15,75 25,75 25,60 C25,45 30,45 30,35 Z" fill="#402418"/>
+                    <path id="svgHairBackRight" d="M70,35 C80,35 85,45 85,60 C85,75 75,75 75,60 C75,45 70,45 70,35 Z" fill="#402418"/>
+                    
+                    <!-- Neck -->
+                    <path d="M44,55 L44,70 C44,74 56,74 56,70 L56,55 Z" fill="#f7dfcb" id="svgNeck"/>
+                    
+                    <!-- Ears -->
+                    <circle cx="34" cy="50" r="4.5" fill="#f7dfcb" id="svgEarL"/>
+                    <circle cx="66" cy="50" r="4.5" fill="#f7dfcb" id="svgEarR"/>
+                    
+                    <!-- Face -->
+                    <path d="M35,46 C35,32 65,32 65,46 C65,60 60,68 50,68 C40,68 35,60 35,46 Z" fill="#f7dfcb" id="svgFace"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="44" cy="46" rx="4" ry="2" fill="#ffffff"/>
+                    <ellipse cx="56" cy="46" rx="4" ry="2" fill="#ffffff"/>
+                    <!-- Iris -->
+                    <circle id="svgIrisL" cx="44" cy="46" r="1.8" fill="#a16827"/>
+                    <circle id="svgIrisR" cx="56" cy="46" r="1.8" fill="#a16827"/>
+                    <!-- Pupil -->
+                    <circle cx="44" cy="46" r="0.8" fill="#000000"/>
+                    <circle cx="56" cy="46" r="0.8" fill="#000000"/>
+
+                    <!-- Lips -->
+                    <path d="M45,58 Q50,61 55,58 Q50,56 45,58 Z" fill="#dd6b6b" id="svgLips"/>
+
+                    <!-- Hair Front Layer -->
+                    <path id="svgHairFront" d="M32,38 C32,25 68,25 68,38 C68,41 62,33 50,33 C38,33 32,41 32,38 Z" fill="#402418"/>
+                </svg>
+
+                <div class="mt-4 z-10 flex gap-2 w-full max-w-[280px]">
+                    <button onclick="triggerAutoScan()" class="w-full bg-gold-500 hover:bg-gold-600 active:translate-y-[1px] text-white font-semibold text-xs py-2.5 px-4 rounded-lg tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-gold-500/10">
+                        <i class="fa-solid fa-expand-arrows-alt"></i> Run Auto Flow Simulator
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- Skin undertone selectors -->
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-xs text-gray-600 font-semibold tracking-wide">Skin Undertones (Select Flow Matrix)</span>
+                        <span class="text-[10px] text-gold-600 font-medium bg-gold-50 px-2 py-0.5 rounded border border-gold-200">Blend Flow</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button onclick="toggleSkin('fair_cool')" id="btnSkin_fair_cool" class="skin-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#fde9df] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Fair Cool</span>
+                        </button>
+                        <button onclick="toggleSkin('olive_warm')" id="btnSkin_olive_warm" class="skin-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#e6c19c] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Olive Warm</span>
+                        </button>
+                        <button onclick="toggleSkin('deep_warm')" id="btnSkin_deep_warm" class="skin-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#b57a4e] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Deep Warm</span>
+                        </button>
+                        <button onclick="toggleSkin('stark_cool')" id="btnSkin_stark_cool" class="skin-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#6d4323] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Dark Cool</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Eye color selectors -->
+                <div>
+                    <span class="text-xs text-gray-600 block mb-1.5 font-semibold tracking-wide">Natural Eye Tones</span>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="toggleEye('blue')" id="btnEye_blue" class="eye-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#3d7494] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Blue</span>
+                        </button>
+                        <button onclick="toggleEye('green')" id="btnEye_green" class="eye-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#34623f] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Green</span>
+                        </button>
+                        <button onclick="toggleEye('amber')" id="btnEye_amber" class="eye-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#a16827] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Amber</span>
+                        </button>
+                        <button onclick="toggleEye('dark_brown')" id="btnEye_dark_brown" class="eye-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#24170f] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Espresso</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Natural Hair Color selectors -->
+                <div>
+                    <span class="text-xs text-gray-600 block mb-1.5 font-semibold tracking-wide">Natural Hair Tones</span>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="toggleHair('platinum')" id="btnHair_platinum" class="hair-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#eeddbb] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Blonde</span>
+                        </button>
+                        <button onclick="toggleHair('auburn')" id="btnHair_auburn" class="hair-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#8c351b] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Auburn</span>
+                        </button>
+                        <button onclick="toggleHair('warm_brunette')" id="btnHair_warm_brunette" class="hair-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#402418] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Brunette</span>
+                        </button>
+                        <button onclick="toggleHair('stark_black')" id="btnHair_stark_black" class="hair-btn p-2 rounded-lg bg-white border border-gold-100 flex flex-col items-center gap-1 transition-all">
+                            <div class="w-5 h-5 rounded-full bg-[#080808] border border-gray-200"></div>
+                            <span class="text-[9px] text-gray-700 font-medium">Obsidian</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gold-100 pt-4 flex flex-col gap-4">
+                <div>
+                    <span class="text-[10px] text-gold-600 font-bold uppercase tracking-widest block">AI Flow Analysis</span>
+                    <h3 id="seasonTitle" class="font-serif text-2xl text-charcoal mt-1">Deep Autumn Flow</h3>
+                </div>
+
+                <!-- Custom curated recommendation slots -->
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div class="bg-warmgray/50 p-3 rounded-xl border border-gold-100/50">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-wider block mb-1">Outfit Palette Range</span>
+                        <div class="flex flex-wrap gap-1.5" id="colorOutfitContainer"></div>
+                    </div>
+                    <div class="bg-warmgray/50 p-3 rounded-xl border border-gold-100/50">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-wider block mb-1">Jewelry Metals</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded-full border border-gray-200" id="colorMetalSwatch"></div>
+                            <span class="font-medium text-gray-700" id="colorMetalLabel">-</span>
+                        </div>
+                    </div>
+                    <div class="bg-warmgray/50 p-3 rounded-xl border border-gold-100/50">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-wider block mb-1">Accent Leathers</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded-full border border-gray-200" id="colorLeatherSwatch"></div>
+                            <span class="font-medium text-gray-700" id="colorLeatherLabel">-</span>
+                        </div>
+                    </div>
+                    <div class="bg-warmgray/50 p-3 rounded-xl border border-gold-100/50">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-wider block mb-1">Recommended Hair Tone</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded-full border border-gray-200" id="colorHairSwatch"></div>
+                            <span class="font-medium text-gray-700" id="colorHairLabel">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT WORKSPACE: CAPSULE CONFIGURATOR & LOOKBOOK GENERATOR -->
+        <section class="lg:col-span-7 flex flex-col gap-8">
+            
+            <!-- THE CAPSULE DESIGNER PANEL (MULTIPLE SELECTIONS ON ALL OPTIONS) -->
+            <div class="bg-white border border-gold-100 rounded-2xl p-6 premium-shadow">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-gold-100 pb-4">
+                    <div>
+                        <h2 class="font-serif text-xl text-charcoal flex items-center gap-2">
+                            <span class="text-gold-500">02.</span> Capsule Wardrobe Architect
+                        </h2>
+                        <p class="text-xs text-gray-500 mt-1">Select all active clothes, accessories, bag formats, and hair frameworks below.</p>
+                    </div>
+                    <!-- Master Controls -->
+                    <div class="flex gap-2 self-stretch sm:self-auto">
+                        <button onclick="selectAllCapsule()" class="text-[11px] font-bold bg-gold-100 hover:bg-gold-200 text-gold-800 px-3 py-1.5 rounded-lg transition-all border border-gold-200">
+                            Select All
+                        </button>
+                        <button onclick="clearAllCapsule()" class="text-[11px] font-bold bg-white hover:bg-gray-100 text-gray-500 px-3 py-1.5 rounded-lg transition-all border border-gray-200">
+                            Clear All
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-6 mt-6">
+                    <!-- Layer 1: Tops -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2.5">
+                            <h3 class="text-xs text-gold-700 font-semibold uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-shirt text-[10px]"></i> Base Tops <span class="text-[9px] text-gray-400 lowercase font-normal">(choose multiple)</span>
+                            </h3>
+                            <span id="topsCountBadge" class="text-[10px] font-bold bg-gold-50 text-gold-700 px-1.5 py-0.5 rounded border border-gold-200">0 selected</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="topsGrid">
+                            <button onclick="toggleItem('T1')" id="btn_T1" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Silk Cami Top</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('T2')" id="btn_T2" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Classic White Tee</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('T3')" id="btn_T3" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Tailored Silk Shirt</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('T4')" id="btn_T4" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Cashmere Turtleneck</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('T5')" id="btn_T5" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Crisp Poplin Blouse</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('T6')" id="btn_T6" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Ribbed Knit Tank</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Layer 2: Bottoms -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2.5">
+                            <h3 class="text-xs text-gold-700 font-semibold uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-venus-mars text-[10px]"></i> Bottoms & Skirts <span class="text-[9px] text-gray-400 lowercase font-normal">(choose multiple)</span>
+                            </h3>
+                            <span id="bottomsCountBadge" class="text-[10px] font-bold bg-gold-50 text-gold-700 px-1.5 py-0.5 rounded border border-gold-200">0 selected</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="bottomsGrid">
+                            <button onclick="toggleItem('B1')" id="btn_B1" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Tailored Trouser</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('B2')" id="btn_B2" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Slim Linen Denim</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('B3')" id="btn_B3" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Sleek Slip Skirt</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('B4')" id="btn_B4" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Pleated Midi Skirt</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('B5')" id="btn_B5" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Wide-Leg Palazzos</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('B6')" id="btn_B6" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Vintage Straight Jeans</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Layer 3: Outerwear -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2.5">
+                            <h3 class="text-xs text-gold-700 font-semibold uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-person-shelter text-[10px]"></i> Jackets & Layering <span class="text-[9px] text-gray-400 lowercase font-normal">(choose multiple)</span>
+                            </h3>
+                            <span id="outerCountBadge" class="text-[10px] font-bold bg-gold-50 text-gold-700 px-1.5 py-0.5 rounded border border-gold-200">0 selected</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="outerGrid">
+                            <button onclick="toggleItem('O1')" id="btn_O1" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Structured Blazer</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('O2')" id="btn_O2" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Oversized Knit Cardigan</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('O3')" id="btn_O3" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Trench Duster</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('O4')" id="btn_O4" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Classic Leather Moto</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('O5')" id="btn_O5" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Cropped Tweed Jacket</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                            <button onclick="toggleItem('O6')" id="btn_O6" class="capsule-item p-3 bg-white border border-gray-200 hover:border-gold-300 rounded-xl flex items-center justify-between text-left transition-all">
+                                <span class="text-xs font-semibold text-gray-700 block">Linen Shirt-Jacket</span>
+                                <i class="fa-regular fa-square text-gray-400 select-check text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-gold-100">
+                        <!-- Bag Choice (Multi-selection enabled) -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] text-gold-700 font-bold uppercase tracking-widest block">Bag Formats</span>
+                                <span id="bagsCountBadge" class="text-[9px] font-bold bg-gold-50 text-gold-600 px-1 rounded border border-gold-200">0</span>
+                            </div>
+                            <div class="flex flex-col gap-1.5 max-h-[140px] overflow-y-auto pr-1">
+                                <button onclick="toggleBag('tot')" id="btnBag_tot" class="bag-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Structured Minimal Tote</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-bag text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleBag('cro')" id="btnBag_cro" class="bag-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Leather Crossbody</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-bag text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleBag('clt')" id="btnBag_clt" class="bag-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Metal Clutch Frame</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-bag text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleBag('bck')" id="btnBag_bck" class="bag-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Sleek Leather Backpack</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-bag text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleBag('hbo')" id="btnBag_hbo" class="bag-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Slouchy Suede Hobo</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-bag text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Jewelry Style (Multi-selection enabled) -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] text-gold-700 font-bold uppercase tracking-widest block">Jewelry Sets</span>
+                                <span id="jewelryCountBadge" class="text-[9px] font-bold bg-gold-50 text-gold-600 px-1 rounded border border-gold-200">0</span>
+                            </div>
+                            <div class="flex flex-col gap-1.5 max-h-[140px] overflow-y-auto pr-1">
+                                <button onclick="toggleJewelry('hoops')" id="btnJewel_hoops" class="jewel-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Chunky Organic Hoops</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-jewel text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleJewelry('chain')" id="btnJewel_chain" class="jewel-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Minimalist Anchor Chain</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-jewel text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleJewelry('pearls')" id="btnJewel_pearls" class="jewel-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Baroque Pearl Drop</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-jewel text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleJewelry('studs')" id="btnJewel_studs" class="jewel-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Diamond Solitaire Studs</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-jewel text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleJewelry('cuff')" id="btnJewel_cuff" class="jewel-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Minimalist Gold Cuff</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-jewel text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hair Style Frame (Multi-selection enabled) -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] text-gold-700 font-bold uppercase tracking-widest block">Hair Frame Silhouettes</span>
+                                <span id="hairCountBadge" class="text-[9px] font-bold bg-gold-50 text-gold-600 px-1 rounded border border-gold-200">0</span>
+                            </div>
+                            <div class="flex flex-col gap-1.5 max-h-[140px] overflow-y-auto pr-1">
+                                <button onclick="toggleHairFrame('updo')" id="btnHairF_updo" class="hairf-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Polished Updo Frame</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-hairf text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleHairFrame('waves')" id="btnHairF_waves" class="hairf-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Voluminous Loose Waves</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-hairf text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleHairFrame('bob')" id="btnHairF_bob" class="hairf-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Sleek Geometric Bob</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-hairf text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleHairFrame('pony')" id="btnHairF_pony" class="hairf-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Low Sleek Ponytail</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-hairf text-[10px]"></i>
+                                </button>
+                                <button onclick="toggleHairFrame('braid')" id="btnHairF_braid" class="hairf-btn w-full p-2 text-left text-xs bg-white border border-gray-200 hover:border-gold-300 rounded-lg flex items-center justify-between transition-all">
+                                    <span>Effortless French Braid</span>
+                                    <i class="fa-regular fa-square text-gray-400 select-check-hairf text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gold-100 rounded-2xl p-6 premium-shadow flex flex-col gap-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gold-100 pb-4">
+                    <div>
+                        <h2 class="font-serif text-xl text-charcoal flex items-center gap-2">
+                            <span class="text-gold-500">03.</span> Stylist Lookbook
+                        </h2>
+                        <p class="text-xs text-gray-500 mt-1">Simultaneous multi-occasion flow tracking active garment layouts.</p>
+                    </div>
+
+                    <!-- Multiple Occasion Tabs Selection -->
+                    <div class="flex bg-warmgray/70 border border-gold-100 p-1 rounded-xl self-stretch sm:self-auto overflow-x-auto gap-1">
+                        <button onclick="toggleOccasion('casual')" id="tab_casual" class="tab-btn px-3 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all uppercase whitespace-nowrap">
+                            Casual
+                        </button>
+                        <button onclick="toggleOccasion('work')" id="tab_work" class="tab-btn px-3 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all uppercase whitespace-nowrap">
+                            Office
+                        </button>
+                        <button onclick="toggleOccasion('evening')" id="tab_evening" class="tab-btn px-3 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all uppercase whitespace-nowrap">
+                            Evening
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Combinatorics Count / Metric -->
+                <div class="flex justify-between items-center bg-gold-50/50 border border-gold-100 p-3.5 rounded-xl">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-gold-100 flex items-center justify-center text-gold-700">
+                            <i class="fa-solid fa-calculator text-xs"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-gold-800 uppercase tracking-wider block font-semibold">Total Capsule Combinations</span>
+                            <span id="txtPermutationCount" class="text-sm font-bold text-charcoal">0 outfits formulated</span>
+                        </div>
+                    </div>
+                    <span class="text-[10px] text-gray-500 hidden sm:inline-block">Minimum input, maximum yield</span>
+                </div>
+
+                <!-- Generated Outfits Result Display -->
+                <div id="lookbookResultsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Dynamic look cards injected here via JS -->
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="border-t border-gold-100 bg-white py-12 text-center text-xs text-gray-500">
+        <p class="tracking-widest uppercase font-serif mb-2 text-gold-700 font-bold">AURA CLOSET TECHNOLOGIES</p>
+        <p class="max-w-md mx-auto leading-relaxed px-4 text-[11px]">Empowering personal expression through algorithmic symmetry and dynamic seasonal flow palettes.</p>
+    </footer>
+
+    <script>
+        /* =========================================
+           STATE & CONFIGURATION DATA
+           ========================================= */
+
+        const seasonsData = {
+            spring: {
+                title: "Warm Spring Flow",
+                skinTone: "#f7dfcb",
+                outfitColors: ["#e9c46a", "#f4a261", "#e76f51", "#2a9d8f", "#9d8189"],
+                outfitLabels: ["Peach Coral", "Warm Honey", "Desert Rose", "Bright Mint", "Muted Rose"],
+                metal: "#e5b565", // Yellow Gold
+                metalName: "High-shine Yellow Gold",
+                leather: "#c68b59", // Light Tan Camel
+                leatherName: "Smooth Tan Leather",
+                hair: "#cb997e", // Warm Honey Gold glaze
+                hairName: "Warm Honey Balayage"
+            },
+            summer: {
+                title: "Cool Summer Flow",
+                skinTone: "#fde9df",
+                outfitColors: ["#a2d2ff", "#bde0fe", "#ffafcc", "#cdb4db", "#cfa8cc"],
+                outfitLabels: ["Soft Periwinkle", "Powder Blue", "Dusty Rose", "Muted Lavender", "Heather Plum"],
+                metal: "#e2e8f0", // Silver / Platinum
+                metalName: "Platinum & Brush Silver",
+                leather: "#7f8c8d", // Soft Charcoal Suede
+                leatherName: "Slate Grey Suede",
+                hair: "#a8dadc", // Ashy Glaze
+                hairName: "Iced Ash Blonde Tone"
+            },
+            autumn: {
+                title: "Deep Autumn Flow",
+                skinTone: "#b57a4e",
+                outfitColors: ["#588157", "#344e41", "#a3b18a", "#bc6c25", "#8f5c38"],
+                outfitLabels: ["Earthy Sage", "Forest Pine", "Muted Olive", "Rich Cinnamon", "Dark Mahogany"],
+                metal: "#cca25c", // Antique Gold
+                metalName: "Brushed Antique Gold",
+                leather: "#4a2c11", // Dark Chocolate
+                leatherName: "Rich Mahogany Leather",
+                hair: "#a15822", // Copper/Amber highlights
+                hairName: "Deep Copper Glaze"
+            },
+            winter: {
+                title: "Clear Winter Flow",
+                skinTone: "#6d4323",
+                outfitColors: ["#d90429", "#1d3557", "#2b2d42", "#f1faee", "#3a0ca3"],
+                outfitLabels: ["Stark Crimson", "Royal Navy", "Obsidian Black", "Pure Icicle White", "Ultraviolet"],
+                metal: "#f8fafc", // White Gold / Silver
+                metalName: "Stark Platinum Silver",
+                leather: "#000000", // Pure black patent
+                leatherName: "Stark Black Boxcalf",
+                hair: "#1a1a1a", // Deep obsidian shine
+                hairName: "Glossy Black Glaze"
+            }
+        };
+
+        const itemsMeta = {
+            T1: { id: "T1", name: "Silk Cami Top", category: "tops" },
+            T2: { id: "T2", name: "Classic White Tee", category: "tops" },
+            T3: { id: "T3", name: "Tailored Silk Shirt", category: "tops" },
+            T4: { id: "T4", name: "Cashmere Turtleneck", category: "tops" },
+            T5: { id: "T5", name: "Crisp Poplin Blouse", category: "tops" },
+            T6: { id: "T6", name: "Ribbed Knit Tank", category: "tops" },
+            B1: { id: "B1", name: "Tailored Trouser", category: "bottoms" },
+            B2: { id: "B2", name: "Slim Linen Denim", category: "bottoms" },
+            B3: { id: "B3", name: "Sleek Slip Skirt", category: "bottoms" },
+            B4: { id: "B4", name: "Pleated Midi Skirt", category: "bottoms" },
+            B5: { id: "B5", name: "Wide-Leg Palazzos", category: "bottoms" },
+            B6: { id: "B6", name: "Vintage Straight Jeans", category: "bottoms" },
+            O1: { id: "O1", name: "Structured Blazer", category: "outer" },
+            O2: { id: "O2", name: "Oversized Knit Cardigan", category: "outer" },
+            O3: { id: "O3", name: "Trench Duster", category: "outer" },
+            O4: { id: "O4", name: "Classic Leather Moto", category: "outer" },
+            O5: { id: "O5", name: "Cropped Tweed Jacket", category: "outer" },
+            O6: { id: "O6", name: "Linen Shirt-Jacket", category: "outer" }
+        };
+
+        const bagMeta = {
+            tot: { name: "Structured Minimal Tote", style: "Casual & Corporate structured accessory" },
+            cro: { name: "Sleek Leather Crossbody", style: "On-the-go minimal day asset" },
+            clt: { name: "Architectural Metal Clutch", style: "High-end jewelry grade clutch" },
+            bck: { name: "Sleek Leather Backpack", style: "Urban hands-free utility" },
+            hbo: { name: "Slouchy Suede Hobo", style: "Bohemian relaxed volume" }
+        };
+
+        const jewelryMeta = {
+            hoops: { name: "Chunky Organic Hoops", accent: "Bold warm/cool framing" },
+            chain: { name: "Minimalist Anchor Chain", accent: "High-end sleek metal profile" },
+            pearls: { name: "Baroque Pearl Drop", accent: "Luminous organic luxury accent" },
+            studs: { name: "Diamond Solitaire Studs", accent: "Timeless brilliant minimal accent" },
+            cuff: { name: "Minimalist Gold Cuff", accent: "Sleek structural wrist focus" }
+        };
+
+        const hairFrameMeta = {
+            updo: { name: "Polished Updo / Topknot", style: "Sleek tailored silhouette" },
+            waves: { name: "Loose Voluminous Waves", style: "Romantic effortless flow outline" },
+            bob: { name: "Sleek Geometric Bob", style: "Sharp modern structure frame" },
+            pony: { name: "Low Sleek Ponytail", style: "Minimalist structural control" },
+            braid: { name: "Effortless French Braid", style: "Intricate textured romanticism" }
+        };
+
+        // Active State of UI (Supporting Multiple Selections)
+        let currentSkins = new Set(['deep_warm']); // Allows blending flows
+        let currentEyes = new Set(['amber']);
+        let currentHairs = new Set(['warm_brunette']);
+        
+        let activeCapsule = new Set(['T2', 'B1', 'O1']); // Default starting setup
+        let activeBags = new Set(['tot', 'cro']); // Multiple bags active
+        let activeJewelry = new Set(['hoops']); // Multiple jewelry sets active
+        let activeHairFrames = new Set(['updo', 'waves']); // Multiple hair frames active
+        let activeOccasions = new Set(['casual', 'work']); // Multiple occasions tracked simultaneously
+
+        /* =========================================
+           AVATAR & COLOR LOGIC ENGINE
+           ========================================= */
+
+        // Dynamic seasonal determination based on blended traits selection
+        function getBlendedSeason() {
+            // Count cold/warm indicators
+            let warmCount = 0;
+            let coolCount = 0;
+
+            currentSkins.forEach(s => {
+                if (s.includes('warm') || s === 'olive_warm') warmCount += 2;
+                if (s.includes('cool')) coolCount += 2;
+            });
+
+            currentEyes.forEach(e => {
+                if (e === 'amber' || e === 'dark_brown') warmCount++;
+                if (e === 'blue' || e === 'green') coolCount++;
+            });
+
+            currentHairs.forEach(h => {
+                if (h === 'auburn' || h === 'warm_brunette') warmCount++;
+                if (h === 'platinum' || h === 'stark_black') coolCount++;
+            });
+
+            // Calculate primary dominant Flow
+            if (warmCount >= coolCount) {
+                // Determine between Autumn and Spring based on depth
+                let hasDeep = Array.from(currentSkins).some(s => s === 'deep_warm') || Array.from(currentHairs).some(h => h === 'stark_black' || h === 'warm_brunette');
+                return hasDeep ? 'autumn' : 'spring';
+            } else {
+                // Determine between Winter and Summer
+                let hasDeep = Array.from(currentSkins).some(s => s === 'stark_cool') || Array.from(currentHairs).some(h => h === 'stark_black');
+                return hasDeep ? 'winter' : 'summer';
+            }
+        }
+
+        function toggleSkin(type) {
+            if (currentSkins.has(type)) {
+                if (currentSkins.size > 1) currentSkins.delete(type); // Must keep at least one
+            } else {
+                currentSkins.add(type);
+            }
+            updateSkinUI();
+        }
+
+        function updateSkinUI() {
+            document.querySelectorAll('.skin-btn').forEach(btn => btn.classList.remove('border-gold-500', 'bg-gold-50', 'ring-2', 'ring-gold-300'));
+            currentSkins.forEach(type => {
+                const element = document.getElementById(`btnSkin_${type}`);
+                if (element) element.classList.add('border-gold-500', 'bg-gold-50', 'ring-2', 'ring-gold-300');
+            });
+
+            // Update Avatar skin fill based on the first selected skin tone for realism
+            let hex = '#f7dfcb';
+            const primarySkin = Array.from(currentSkins)[0];
+            if (primarySkin === 'fair_cool') hex = '#fde9df';
+            if (primarySkin === 'olive_warm') hex = '#e6c19c';
+            if (primarySkin === 'deep_warm') hex = '#b57a4e';
+            if (primarySkin === 'stark_cool') hex = '#6d4323';
+
+            document.getElementById('svgFace').setAttribute('fill', hex);
+            document.getElementById('svgNeck').setAttribute('fill', hex);
+            document.getElementById('svgEarL').setAttribute('fill', hex);
+            document.getElementById('svgEarR').setAttribute('fill', hex);
+
+            updateStylingReport();
+        }
+
+        function toggleEye(color) {
+            if (currentEyes.has(color)) {
+                if (currentEyes.size > 1) currentEyes.delete(color);
+            } else {
+                currentEyes.add(color);
+            }
+            updateEyeUI();
+        }
+
+        function updateEyeUI() {
+            document.querySelectorAll('.eye-btn').forEach(btn => btn.classList.remove('border-gold-500', 'bg-gold-50', 'ring-2', 'ring-gold-300'));
+            currentEyes.forEach(color => {
+                const element = document.getElementById(`btnEye_${color}`);
+                if (element) element.classList.add('border-gold-500', 'bg-gold-50', 'ring-2', 'ring-gold-300');
+            });
+
+            let fillHex = '#a16827';
+            const primaryEye = Array.from(currentEyes)[0];
+            if (primaryEye === 'blue') fillHex = '#3d7494';
+            if (primaryEye === 'green') fillHex = '#34623f';
+            if (primaryEye === 'amber') fillHex = '#a16827';
+            if (primaryEye === 'dark_brown') fillHex = '#24170f';
+
+            document.getElementById('svgIrisL').setAttribute('fill', fillHex);
+            document.getElementById('svgIrisR').setAttribute('fill', fillHex);
+
+            updateStylingReport();
+        }
+
+        function toggleHair(color) {
+            if (currentHairs.has(color)) {
+                if (currentHairs.size > 1) currentHairs.delete(color);
+            } else {
+                currentHairs.add(color);
+            }
+            updateHairUI();
+        }
+
+        function updateHairUI() {
+            document.querySelectorAll('.hair-btn').forEach(btn => btn.classList.remove('border-gold-500', 'bg-gold-50', 'ring-2', 'ring-gold-300'));
+            currentHairs.forEach(color => {
+                const element = document.getElementById(`btnHair_${color}`);
+                if (element) element.classList.add('border-gold-500', 'bg-gold-50', 'ring-2', 'ring-gold-300');
+            });
+
+            let fillHex = '#402418';
+            const primaryHair = Array.from(currentHairs)[0];
+            if (primaryHair === 'platinum') fillHex = '#eeddbb';
+            if (primaryHair === 'auburn') fillHex = '#8c351b';
+            if (primaryHair === 'warm_brunette') fillHex = '#402418';
+            if (primaryHair === 'stark_black') fillHex = '#080808';
+
+            document.getElementById('svgHairBack').setAttribute('fill', fillHex);
+            document.getElementById('svgHairBackRight').setAttribute('fill', fillHex);
+            document.getElementById('svgHairFront').setAttribute('fill', fillHex);
+
+            updateStylingReport();
+        }
+
+        function triggerAutoScan() {
+            const scanLine = document.getElementById('scannerLine');
+            scanLine.classList.remove('hidden');
+            
+            const skins = ['fair_cool', 'olive_warm', 'deep_warm', 'stark_cool'];
+            const eyes = ['blue', 'green', 'amber', 'dark_brown'];
+            const hairs = ['platinum', 'auburn', 'warm_brunette', 'stark_black'];
+
+            let count = 0;
+            const interval = setInterval(() => {
+                // Simulated random flow iterations
+                currentSkins = new Set([skins[Math.floor(Math.random() * skins.length)]]);
+                currentEyes = new Set([eyes[Math.floor(Math.random() * eyes.length)]]);
+                currentHairs = new Set([hairs[Math.floor(Math.random() * hairs.length)]]);
+
+                updateSkinUI();
+                updateEyeUI();
+                updateHairUI();
+
+                count++;
+                if (count > 10) {
+                    clearInterval(interval);
+                    scanLine.classList.add('hidden');
+                    
+                    // Settle onto highly harmonious blend flow
+                    currentSkins = new Set(['deep_warm', 'olive_warm']);
+                    currentEyes = new Set(['amber', 'green']);
+                    currentHairs = new Set(['warm_brunette']);
+                    
+                    updateSkinUI();
+                    updateEyeUI();
+                    updateHairUI();
+                }
+            }, 180);
+        }
+
+        function updateStylingReport() {
+            const flowSeason = getBlendedSeason();
+            const data = seasonsData[flowSeason];
+            
+            // Render sub-flow titles
+            let blendedSuffix = "";
+            if (currentSkins.size > 1 || currentEyes.size > 1) {
+                blendedSuffix = " (Blended Harmony)";
+            }
+            document.getElementById('seasonTitle').innerText = data.title + blendedSuffix;
+            
+            // Clothing Palette swatches
+            const outfitContainer = document.getElementById('colorOutfitContainer');
+            outfitContainer.innerHTML = '';
+            data.outfitColors.forEach((color, idx) => {
+                const swatch = document.createElement('div');
+                swatch.className = "w-6 h-6 rounded-full border border-gray-200 relative group cursor-pointer transition-transform hover:scale-110";
+                swatch.style.backgroundColor = color;
+                
+                // Tooltip
+                const tooltip = document.createElement('span');
+                tooltip.className = "absolute bottom-8 left-1/2 -translate-x-1/2 bg-charcoal text-[9px] px-2 py-0.5 rounded text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 border border-gold-200 font-medium";
+                tooltip.innerText = data.outfitLabels[idx] || "Tone";
+                
+                swatch.appendChild(tooltip);
+                outfitContainer.appendChild(swatch);
+            });
+
+            // Metal Swatch Update
+            document.getElementById('colorMetalSwatch').style.backgroundColor = data.metal;
+            document.getElementById('colorMetalLabel').innerText = data.metalName;
+
+            // Leather Accent Update
+            document.getElementById('colorLeatherSwatch').style.backgroundColor = data.leather;
+            document.getElementById('colorLeatherLabel').innerText = data.leatherName;
+
+            // Hair Hue Accent
+            document.getElementById('colorHairSwatch').style.backgroundColor = data.hair;
+            document.getElementById('colorHairLabel').innerText = data.hairName;
+
+            // Generate outfits to align with the active color palette dynamic changes
+            generateOutfits();
+        }
+
+        /* =========================================
+           CAPSULE WARDROBE CALCULATOR (MULTI-SELECT)
+           ========================================= */
+
+        function toggleItem(id) {
+            const itemElement = document.getElementById(`btn_${id}`);
+            const icon = itemElement.querySelector('.select-check');
+
+            if (activeCapsule.has(id)) {
+                activeCapsule.delete(id);
+                itemElement.classList.remove('border-gold-500', 'bg-gold-50/50', 'ring-2', 'ring-gold-200');
+                icon.className = "fa-regular fa-square text-gray-400 select-check text-xs";
+            } else {
+                activeCapsule.add(id);
+                itemElement.classList.add('border-gold-500', 'bg-gold-50/50', 'ring-2', 'ring-gold-200');
+                icon.className = "fa-regular fa-square-check text-gold-600 select-check text-xs";
+            }
+            
+            syncCapsuleCounts();
+            generateOutfits();
+        }
+
+        function toggleBag(id) {
+            const element = document.getElementById(`btnBag_${id}`);
+            const icon = element.querySelector('.select-check-bag');
+
+            if (activeBags.has(id)) {
+                if (activeBags.size > 1) {
+                    activeBags.delete(id);
+                    element.classList.remove('border-gold-500', 'bg-gold-50/30');
+                    icon.className = "fa-regular fa-square text-gray-400 select-check-bag text-[10px]";
+                }
+            } else {
+                activeBags.add(id);
+                element.classList.add('border-gold-500', 'bg-gold-50/30');
+                icon.className = "fa-regular fa-square-check text-gold-600 select-check-bag text-[10px]";
+            }
+            syncCapsuleCounts();
+            generateOutfits();
+        }
+
+        function toggleJewelry(id) {
+            const element = document.getElementById(`btnJewel_${id}`);
+            const icon = element.querySelector('.select-check-jewel');
+
+            if (activeJewelry.has(id)) {
+                if (activeJewelry.size > 1) {
+                    activeJewelry.delete(id);
+                    element.classList.remove('border-gold-500', 'bg-gold-50/30');
+                    icon.className = "fa-regular fa-square text-gray-400 select-check-jewel text-[10px]";
+                }
+            } else {
+                activeJewelry.add(id);
+                element.classList.add('border-gold-500', 'bg-gold-50/30');
+                icon.className = "fa-regular fa-square-check text-gold-600 select-check-jewel text-[10px]";
+            }
+            syncCapsuleCounts();
+            generateOutfits();
+        }
+
+        function toggleHairFrame(id) {
+            const element = document.getElementById(`btnHairF_${id}`);
+            const icon = element.querySelector('.select-check-hairf');
+
+            if (activeHairFrames.has(id)) {
+                if (activeHairFrames.size > 1) {
+                    activeHairFrames.delete(id);
+                    element.classList.remove('border-gold-500', 'bg-gold-50/30');
+                    icon.className = "fa-regular fa-square text-gray-400 select-check-hairf text-[10px]";
+                }
+            } else {
+                activeHairFrames.add(id);
+                element.classList.add('border-gold-500', 'bg-gold-50/30');
+                icon.className = "fa-regular fa-square-check text-gold-600 select-check-hairf text-[10px]";
+            }
+            syncCapsuleCounts();
+            generateOutfits();
+        }
+
+        function toggleOccasion(occ) {
+            const tab = document.getElementById(`tab_${occ}`);
+            if (activeOccasions.has(occ)) {
+                if (activeOccasions.size > 1) {
+                    activeOccasions.delete(occ);
+                    tab.classList.remove('text-gold-700', 'bg-white', 'shadow-sm', 'border', 'border-gold-100');
+                    tab.classList.add('text-gray-500');
+                }
+            } else {
+                activeOccasions.add(occ);
+                tab.classList.remove('text-gray-500');
+                tab.classList.add('text-gold-700', 'bg-white', 'shadow-sm', 'border', 'border-gold-100');
+            }
+            generateOutfits();
+        }
+
+        function selectAllCapsule() {
+            // Select all garments
+            Object.keys(itemsMeta).forEach(id => {
+                if (!activeCapsule.has(id)) {
+                    toggleItem(id);
+                }
+            });
+
+            // Select all accessories
+            Object.keys(bagMeta).forEach(id => {
+                if (!activeBags.has(id)) toggleBag(id);
+            });
+            Object.keys(jewelryMeta).forEach(id => {
+                if (!activeJewelry.has(id)) toggleJewelry(id);
+            });
+            Object.keys(hairFrameMeta).forEach(id => {
+                if (!activeHairFrames.has(id)) toggleHairFrame(id);
+            });
+        }
+
+        function clearAllCapsule() {
+            // Uncheck everything but keep at least 1 in each category to avoid code crashes
+            const keys = Object.keys(itemsMeta);
+            activeCapsule.clear();
+            toggleItem(keys[0]); // keeps at least one
+
+            const bags = Object.keys(bagMeta);
+            activeBags.clear();
+            toggleBag(bags[0]);
+
+            const jewels = Object.keys(jewelryMeta);
+            activeJewelry.clear();
+            toggleJewelry(jewels[0]);
+
+            const hairFs = Object.keys(hairFrameMeta);
+            activeHairFrames.clear();
+            toggleHairFrame(hairFs[0]);
+        }
+
+        function syncCapsuleCounts() {
+            const activeArray = Array.from(activeCapsule);
+            const activeTops = activeArray.filter(id => itemsMeta[id].category === 'tops');
+            const activeBottoms = activeArray.filter(id => itemsMeta[id].category === 'bottoms');
+            const activeOuter = activeArray.filter(id => itemsMeta[id].category === 'outer');
+
+            document.getElementById('topsCountBadge').innerText = `${activeTops.length} selected`;
+            document.getElementById('bottomsCountBadge').innerText = `${activeBottoms.length} selected`;
+            document.getElementById('outerCountBadge').innerText = `${activeOuter.length} selected`;
+
+            document.getElementById('bagsCountBadge').innerText = activeBags.size;
+            document.getElementById('jewelryCountBadge').innerText = activeJewelry.size;
+            document.getElementById('hairCountBadge').innerText = activeHairFrames.size;
+        }
+
+        /* =========================================
+           OUTFIT COMBINATORICS ENGINE
+           ========================================= */
+
+        function generateOutfits() {
+            const grid = document.getElementById('lookbookResultsGrid');
+            grid.innerHTML = '';
+
+            const activeArray = Array.from(activeCapsule);
+            const activeTops = activeArray.filter(id => itemsMeta[id].category === 'tops').map(id => itemsMeta[id]);
+            const activeBottoms = activeArray.filter(id => itemsMeta[id].category === 'bottoms').map(id => itemsMeta[id]);
+            const activeOuter = activeArray.filter(id => itemsMeta[id].category === 'outer').map(id => itemsMeta[id]);
+
+            const flowSeason = getBlendedSeason();
+            const seasonColors = seasonsData[flowSeason].outfitColors;
+
+            // Selected accessory options arrays
+            const selectedBags = Array.from(activeBags).map(key => bagMeta[key]);
+            const selectedJewelry = Array.from(activeJewelry).map(key => jewelryMeta[key]);
+            const selectedHairFrames = Array.from(activeHairFrames).map(key => hairFrameMeta[key]);
+
+            let rawPermutations = [];
+
+            // Loop to assemble valid garments pairs
+            activeTops.forEach(t => {
+                activeBottoms.forEach(b => {
+                    // For each top and bottom combination, generate base and outer options
+                    let baseLook = { top: t, bottom: b, outer: null };
+                    rawPermutations.push(baseLook);
+
+                    activeOuter.forEach(o => {
+                        let layeredLook = { top: t, bottom: b, outer: o };
+                        rawPermutations.push(layeredLook);
+                    });
+                });
+            });
+
+            // Map all looks with accessories
+            let outputLooks = [];
+            rawPermutations.forEach(look => {
+                selectedBags.forEach(bag => {
+                    selectedJewelry.forEach(jewel => {
+                        selectedHairFrames.forEach(hairf => {
+                            outputLooks.push({
+                                ...look,
+                                bag: bag,
+                                jewel: jewel,
+                                hairf: hairf
+                            });
+                        });
+                    });
+                });
+            });
+
+            // Filter generated looks based on active occasion toggles
+            let filteredLooks = [];
+            outputLooks.forEach((look) => {
+                let isMatch = false;
+
+                // Simple check: we dynamically map combinations to occasions
+                activeOccasions.forEach(occ => {
+                    if (occ === 'casual') {
+                        // Casual appreciates White Tees, Linen Denim, and Knit Cardigans
+                        if (['T2', 'T6'].includes(look.top.id) || ['B2', 'B6'].includes(look.bottom.id) || (look.outer && ['O2', 'O4', 'O6'].includes(look.outer.id))) {
+                            isMatch = true;
+                        } else if (!look.outer) {
+                            isMatch = true; 
+                        }
+                    } else if (occ === 'work') {
+                        // Workwear appreciates blazers, button downs and trousers
+                        if (['T3', 'T4', 'T5'].includes(look.top.id) || ['B1', 'B4', 'B5'].includes(look.bottom.id) || (look.outer && ['O1', 'O3', 'O5'].includes(look.outer.id))) {
+                            isMatch = true;
+                        }
+                    } else if (occ === 'evening') {
+                        // Evening emphasizes beautiful silk camis, slip skirts and clutches
+                        if (['T1', 'T4'].includes(look.top.id) || ['B3'].includes(look.bottom.id) || look.bag.name.includes("Clutch") || (look.outer && look.outer.id === 'O4')) {
+                            isMatch = true;
+                        }
+                    }
+                });
+
+                if (isMatch) {
+                    filteredLooks.push(look);
+                }
+            });
+
+            // Update Permutations counter element
+            document.getElementById('txtPermutationCount').innerText = `${filteredLooks.length} custom combinations generated`;
+
+            // Display dynamic cards
+            if (filteredLooks.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-2 text-center py-12 px-4 border border-dashed border-gold-200 rounded-xl bg-warmgray/30">
+                        <i class="fa-solid fa-folder-open text-gold-400 text-3xl mb-3"></i>
+                        <h4 class="text-gray-700 font-semibold text-sm">Insufficient Selections</h4>
+                        <p class="text-xs text-gray-500 mt-1">Select more garments or adjust the active occasion options to compute optimal flow styling paths.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Cap visible looks at 12 for professional viewport speed and cleanliness
+            const visibleLooks = filteredLooks.slice(0, 12);
+
+            visibleLooks.forEach((look, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white border border-gold-100 hover:border-gold-300 rounded-xl p-5 transition-all flex flex-col justify-between gap-4 group premium-shadow-sm hover:shadow-md";
+
+                // Map seasonal colors directly onto card representation
+                let topColor = seasonColors[0];
+                let botColor = seasonColors[1];
+                let outColor = seasonColors[2] || seasonColors[0];
+
+                const cardVisual = `
+                    <div class="relative bg-warmgray/50 rounded-lg aspect-video w-full flex items-center justify-center p-3 border border-gold-100/50 overflow-hidden">
+                        <!-- Dynamic Flat Lay Graphic Blocks -->
+                        <div class="flex gap-4 items-center">
+                            <div class="flex flex-col items-center gap-1">
+                                <div class="w-11 h-11 rounded-lg border border-gold-200/50 flex items-center justify-center relative shadow-sm" style="background-color: ${topColor};">
+                                    <i class="fa-solid fa-shirt text-white/90 text-sm"></i>
+                                </div>
+                                <span class="text-[8px] text-gray-500 max-w-[60px] text-center truncate font-medium">${look.top.name}</span>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-1">
+                                <div class="w-11 h-11 rounded-lg border border-gold-200/50 flex items-center justify-center relative shadow-sm" style="background-color: ${botColor};">
+                                    <i class="fa-solid fa-socks text-white/90 text-sm"></i>
+                                </div>
+                                <span class="text-[8px] text-gray-500 max-w-[60px] text-center truncate font-medium">${look.bottom.name}</span>
+                            </div>
+
+                            ${look.outer ? `
+                            <div class="flex flex-col items-center gap-1">
+                                <div class="w-11 h-11 rounded-lg border border-gold-200/50 flex items-center justify-center relative shadow-sm" style="background-color: ${outColor};">
+                                    <i class="fa-solid fa-person-shelter text-white/90 text-sm"></i>
+                                </div>
+                                <span class="text-[8px] text-gray-500 max-w-[60px] text-center truncate font-medium">${look.outer.name}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- Accent labels -->
+                        <div class="absolute bottom-2 right-2 flex items-center gap-1 bg-white/90 px-2 py-0.5 rounded text-[8px] text-gold-700 border border-gold-200/40 shadow-sm font-semibold">
+                            <i class="fa-solid fa-bag-shopping"></i> ${look.bag.name.split(' ')[1] || "Bag"}
+                        </div>
+                    </div>
+                `;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] text-gold-600 font-bold uppercase tracking-widest bg-gold-50 border border-gold-200/40 px-2 py-0.5 rounded">Look Combination 0${idx + 1}</span>
+                            <span class="text-[9px] text-gray-400 uppercase tracking-wider font-semibold">Capsule Formulation</span>
+                        </div>
+                        <h4 class="font-serif text-base text-charcoal group-hover:text-gold-600 transition-colors">
+                            The ${look.top.name.split(' ')[0]} & ${look.bottom.name.split(' ')[1] || "Garment"} Formulation
+                        </h4>
+                        <p class="text-[11px] text-gray-500 mt-2 leading-relaxed">
+                            A curated assembly featuring the <span class="text-charcoal font-semibold">${look.top.name}</span> paired with the <span class="text-charcoal font-semibold">${look.bottom.name}</span>${look.outer ? ` under the <span class="text-charcoal font-semibold">${look.outer.name}</span>` : ''}.
+                        </p>
+                    </div>
+
+                    ${cardVisual}
+
+                    <!-- Styling Directives -->
+                    <div class="border-t border-gold-100 pt-3 flex flex-col gap-1 text-[11px] text-gray-500">
+                        <div class="flex justify-between">
+                            <span>Metal Range:</span>
+                            <span class="text-charcoal font-semibold">${seasonsData[flowSeason].metalName}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Hair Silhouette:</span>
+                            <span class="text-charcoal font-semibold">${look.hairf.name}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Active Bag:</span>
+                            <span class="text-charcoal font-semibold">${look.bag.name}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Jewelry Match:</span>
+                            <span class="text-charcoal font-semibold text-right max-w-[150px] truncate">${look.jewel.name}</span>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        /* =========================================
+           INITIALIZATION TRIGGER
+           ========================================= */
+
+        window.onload = function() {
+            // Apply default visually active buttons for skin/eye/hair features
+            updateSkinUI();
+            updateEyeUI();
+            updateHairUI();
+
+            // Populate starting values to the selections
+            activeCapsule.forEach(id => {
+                const element = document.getElementById(`btn_${id}`);
+                const icon = element.querySelector('.select-check');
+                if (element) {
+                    element.classList.add('border-gold-500', 'bg-gold-50/50', 'ring-2', 'ring-gold-200');
+                    if (icon) icon.className = "fa-regular fa-square-check text-gold-600 select-check text-xs";
+                }
+            });
+
+            activeBags.forEach(id => {
+                const element = document.getElementById(`btnBag_${id}`);
+                const icon = element.querySelector('.select-check-bag');
+                if (element) {
+                    element.classList.add('border-gold-500', 'bg-gold-50/30');
+                    if (icon) icon.className = "fa-regular fa-square-check text-gold-600 select-check-bag text-[10px]";
+                }
+            });
+
+            activeJewelry.forEach(id => {
+                const element = document.getElementById(`btnJewel_${id}`);
+                const icon = element.querySelector('.select-check-jewel');
+                if (element) {
+                    element.classList.add('border-gold-500', 'bg-gold-50/30');
+                    if (icon) icon.className = "fa-regular fa-square-check text-gold-600 select-check-jewel text-[10px]";
+                }
+            });
+
+            activeHairFrames.forEach(id => {
+                const element = document.getElementById(`btnHairF_${id}`);
+                const icon = element.querySelector('.select-check-hairf');
+                if (element) {
+                    element.classList.add('border-gold-500', 'bg-gold-50/30');
+                    if (icon) icon.className = "fa-regular fa-square-check text-gold-600 select-check-hairf text-[10px]";
+                }
+            });
+
+            activeOccasions.forEach(occ => {
+                const tab = document.getElementById(`tab_${occ}`);
+                if (tab) {
+                    tab.classList.add('text-gold-700', 'bg-white', 'shadow-sm', 'border', 'border-gold-100');
+                }
+            });
+
+            syncCapsuleCounts();
+            updateStylingReport();
+        }
+    </script>
+</body>
+</html>
